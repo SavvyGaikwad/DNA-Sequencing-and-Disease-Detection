@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA Double Helix Structure</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        #main {
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0 20px 20px 20px;
+        }
+
+        .legend {
+            width: 300px;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-right: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .legend h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .color-box {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+        }
+
+        #container {
+            flex-grow: 1;
+            height: 600px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #status {
+            margin-top: 10px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            font-family: monospace;
+        }
+
+        #searchResultsContainer, #diseaseResultsContainer {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #searchResults, #diseaseResults {
+            font-family: monospace;
+            max-height: 150px;
+            overflow-y: auto;
+            word-break: break-all;
+        }
+
+        .search-heading {
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        /* Disease Boxes Section */
+        #disease-boxes-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin-top: 20px;
+            padding: 0 20px;
+        }
+        
+        .disease-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .disease-box {
+            flex: 1;
+            margin: 0 10px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .disease-box:hover {
+            background-color: #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            #main {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .legend {
+                width: 90%;
+                margin-bottom: 20px;
+                margin-right: 0;
+            }
+
+            #container {
+                width: 100%;
+            }
+            
+            
+        }
+    </style>
+</head>
+<body>
+    <h1>DNA Double Helix Structure</h1>
+    <div id="main">
+        <div class="legend">
+            <h3>DNA Structure Legend:</h3>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: gold;"></div>
+                <span>Phosphate backbone</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #00ff00;"></div>
+                <span>Adenine (A)</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #800080;"></div>
+                <span>Thymine (T)</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #ff0000;"></div>
+                <span>Cytosine (C)</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #0000ff;"></div>
+                <span>Guanine (G)</span>
+            </div>
+            
+            <h3>Pattern Match Colors:</h3>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #ff69b4;"></div>
+                <span>Adenine (A) in pattern</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #00ffff;"></div>
+                <span>Thymine (T) in pattern</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #f5f5dc;"></div>
+                <span>Cytosine (C) in pattern</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #e6e6fa;"></div>
+                <span>Guanine (G) in pattern</span>
+            </div>
+
+            <!-- Input Box and Visualization Button -->
+            <div style="margin-top: 20px;">
+                <label for="sequenceInput" class="input-label">DNA Sequence:</label>
+                <input type="text" id="sequenceInput" placeholder="e.g., ATCGATCG" class="input-field">
+                
+                <label for="complementaryInput" class="input-label">Complementary Sequence:</label>
+                <input type="text" id="complementaryInput" placeholder="" class="input-field" readonly>
+                
+                <button id="visualizeButton">Visualize</button>
+            </div>
+
+            <div id="status"></div>
+
+            <!-- Pattern Search Section -->
+            <div style="margin-top: 20px;">
+                <label for="patternInput" class="input-label">Pattern to Search:</label>
+                <input type="text" id="patternInput" placeholder="e.g., ATG" class="input-field">
+                <button id="searchButton">Search Pattern in Complementary (Z-Algorithm)</button>
+                <button id="searchDiseaseButton">Search for Diseases</button>
+            </div>
+
+            <!-- Search Results Section -->
+            <div id="searchResultsContainer" style="display: none;">
+                <div class="search-heading">Search Results:</div>
+                <div id="searchResults"></div>
+                <div id="executionTime" style="margin-top: 5px; font-size: 12px; color: #666;"></div>
+            </div>
+            
+            <!-- Disease Search Results Section -->
+            <div id="diseaseResultsContainer" style="display: none;">
+                <div class="search-heading">Disease Association Results:</div>
+                <div id="diseaseResults"></div>
+            </div>
+        </div>
+
+        <div id="container"></div>
+    </div>
+    
+    <!-- Disease Boxes Section -->
+    <!-- Disease Boxes Section -->
+    
+
+<!-- Add the disease boxes here, directly below the visualization -->
+    <div id="disease-boxes-container">
+        <div class="disease-row">
+            <div class="disease-box" onclick="searchForSpecificDisease('Sickle Cell Anemia')">Sickle Cell Anemia</div>
+            <div class="disease-box" onclick="searchForSpecificDisease('Huntington\'s Disease')">Huntington's Disease</div>
+            <div class="disease-box" onclick="searchForSpecificDisease('Myotonic Dystrophy')">Myotonic Dystrophy</div>
+            <div class="disease-box" onclick="searchForSpecificDisease('Amyotrophic Lateral Sclerosis')">Amyotrophic Lateral Sclerosis</div>
+        </div>
+        <div class="disease-row">
+            <div class="disease-box" onclick="searchForSpecificDisease('Fragile X-associated Tremor')">Fragile X-associated Tremor</div>
+            <div class="disease-box" onclick="searchForSpecificDisease('Kennedy\'s Disease')">Kennedy's Disease</div>
+            <div class="disease-box" onclick="searchForSpecificDisease('Alzheimer Type 1')">Alzheimer Type 1</div>
+            <div class="disease-box" onclick="searchForSpecificDisease('Alzheimer Type 2')">Alzheimer Type 2</div>
+        </div>
+        <div class="disease-row">
+            <div class="disease-box" onclick="searchForSpecificDisease('Spinocerebellar Ataxia Type 1')">Spinocerebellar Ataxia Type 1</div>
+            <div class="disease-box" onclick="searchForSpecificDisease('Friedreich\'s Ataxia')">Friedreich's Ataxia</div>
+            <div class="disease-box" onclick="searchForSpecificDisease('Oculopharyngeal Muscular Dystrophy')">Oculopharyngeal Muscular Dystrophy</div>
+            <div class="disease-box" onclick="searchForSpecificDisease('Dentatorubral–pallidoluysian atrophy')">Dentatorubral–pallidoluysian atrophy</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Initialize ThreeJS scene
+        const container = document.getElementById('container');
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+        renderer.setSize(width, height);
+        renderer.setClearColor(0xffffff);
+        container.appendChild(renderer.domElement);
+
+        // DNA double helix parameters
+        const radius = 4;
+        const pitch = 8;
+        const numPoints = 1000;
+        const t = Array.from({ length: numPoints }, (_, i) => i * 20 / numPoints);
+
+        // Create the DNA strands
+        const strand1 = t.map(val => ({
+            x: radius * Math.sin(val),
+            y: pitch * val / (2 * Math.PI),
+            z: radius * Math.cos(val)
+        }));
+
+        const strand2 = t.map(val => ({
+            x: radius * Math.sin(val + Math.PI),
+            y: pitch * val / (2 * Math.PI),
+            z: radius * Math.cos(val + Math.PI)
+        }));
+
+        // Draw backbone
+        const backboneMaterial = new THREE.LineBasicMaterial({ color: 0xffd700 });
+        const backboneGeometry1 = new THREE.BufferGeometry().setAttribute(
+            'position', 
+            new THREE.Float32BufferAttribute(strand1.flatMap(p => [p.x, p.y, p.z]), 3)
+        );
+        const backboneGeometry2 = new THREE.BufferGeometry().setAttribute(
+            'position', 
+            new THREE.Float32BufferAttribute(strand2.flatMap(p => [p.x, p.y, p.z]), 3)
+        );
+
+        const backbone1 = new THREE.Line(backboneGeometry1, backboneMaterial);
+        const backbone2 = new THREE.Line(backboneGeometry2, backboneMaterial);
+        scene.add(backbone1);
+        scene.add(backbone2);
+
+        // Base pair colors
+        const defaultColors = {
+            A: 0x00ff00,    // Green
+            T: 0x800080,    // Purple
+            G: 0x0000ff,    // Blue
+            C: 0xff0000     // Red
+        };
+        
+        // Pattern match colors
+        const matchColors = {
+            A: 0xff69b4,    // Pink
+            T: 0x00ffff,    // Cyan
+            C: 0xf5f5dc,    // Beige
+            G: 0xe6e6fa     // Lavender
+        };
+
+        // Store base pair objects for later removal
+        let basePairObjects = [];
+        // Store matched positions for highlighting
+        let matchedPositions = [];
+
+        // Function to clear existing base pairs
+        function clearBasePairs() {
+            basePairObjects.forEach(obj => scene.remove(obj));
+            basePairObjects = [];
+        }
+        
+        // Function to generate complementary DNA strand
+        function generateComplementarySequence(sequence) {
+            return sequence.split('').map(base => {
+                switch(base.toUpperCase()) {
+                    case 'A': return 'T';
+                    case 'T': return 'A';
+                    case 'C': return 'G';
+                    case 'G': return 'C';
+                    default: return 'N'; // For any non-standard bases
+                }
+            }).join('');
+        }
+
+        // Function to update complementary sequence display in real-time
+        document.getElementById("sequenceInput").addEventListener("input", function() {
+            const sequence = this.value.trim().toUpperCase();
+            const complementarySeq = generateComplementarySequence(sequence);
+            document.getElementById("complementaryInput").value = complementarySeq;
+        });
+
+        // Function to draw base pairs based on sequence with highlighting for matched patterns
+        function drawBasePairs(sequence, matchedPositions = []) {
+            clearBasePairs();
+            
+            // Remove non-ATGC characters
+            sequence = sequence.replace(/[^ATGC]/gi, '');
+            
+            // Generate complementary strand based on base pairing rules
+            const compSeq = generateComplementarySequence(sequence);
+            
+            // Create map for positions in complementary sequence that match the pattern
+            const compMatchPositionsMap = new Map();
+            matchedPositions.forEach(pos => {
+                // For each position in the pattern match, mark the corresponding nucleotides
+                for (let i = 0; i < matchedPositions.patternLength; i++) {
+                    if (pos + i < compSeq.length) {
+                        compMatchPositionsMap.set(pos + i, true);
+                    }
+                }
+            });
+            
+            // Generate base sequence pairs
+            const baseSequence = [];
+            for (let i = 0; i < sequence.length; i++) {
+                const base = sequence[i].toUpperCase();
+                let pair;
+                switch (base) {
+                    case 'A': pair = ['A', 'T']; break;
+                    case 'T': pair = ['T', 'A']; break;
+                    case 'G': pair = ['G', 'C']; break;
+                    case 'C': pair = ['C', 'G']; break;
+                    default: pair = ['A', 'T']; break;
+                }
+                baseSequence.push(pair);
+            }
+            
+            // Calculate indices for even distribution along the helix
+            const baseIndices = Array.from(
+                { length: baseSequence.length }, 
+                (_, i) => Math.floor(i * (numPoints / baseSequence.length))
+            );
+
+            // Create connection lines for each base pair
+            baseIndices.forEach((idx, i) => {
+                if (idx >= strand1.length || idx >= strand2.length) return;
+                
+                const s1 = strand1[idx];
+                const s2 = strand2[idx];
+                const midX = (s1.x + s2.x) / 2;
+                const midY = (s1.y + s2.y) / 2;
+                const midZ = (s1.z + s2.z) / 2;
+
+                const geom1 = new THREE.BufferGeometry().setAttribute(
+                    'position', 
+                    new THREE.Float32BufferAttribute([s1.x, s1.y, s1.z, midX, midY, midZ], 3)
+                );
+                const geom2 = new THREE.BufferGeometry().setAttribute(
+                    'position', 
+                    new THREE.Float32BufferAttribute([midX, midY, midZ, s2.x, s2.y, s2.z], 3)
+                );
+
+                // Use special colors for matched bases in complementary sequence
+                const isPartOfMatch = compMatchPositionsMap.has(i);
+                
+                // Original sequence colors (strand 1)
+                const baseName1 = baseSequence[i][0];
+                const color1 = isPartOfMatch ? matchColors[baseName1] : defaultColors[baseName1];
+                
+                // Complementary sequence colors (strand 2)
+                const baseName2 = baseSequence[i][1];
+                const color2 = isPartOfMatch ? matchColors[baseName2] : defaultColors[baseName2];
+
+                const line1 = new THREE.Line(
+                    geom1, 
+                    new THREE.LineBasicMaterial({ color: color1 })
+                );
+                const line2 = new THREE.Line(
+                    geom2, 
+                    new THREE.LineBasicMaterial({ color: color2 })
+                );
+
+                scene.add(line1);
+                scene.add(line2);
+                
+                basePairObjects.push(line1, line2);
+            });
+            
+            // Update the status display
+            document.getElementById('status').textContent = 
+                `Displaying ${Math.min(sequence.length, baseIndices.length)} base pairs from sequence`;
+                
+            // Generate and display complementary sequence
+            const complementarySeq = generateComplementarySequence(sequence);
+            document.getElementById("complementaryInput").value = complementarySeq;
+                
+            return sequence;
+        }
+        
+        // Z-Algorithm implementation
+        function zAlgorithm(concat) {
+            const l = concat.length;
+            const z = new Array(l).fill(0);
+            let left = 0, right = 0;
+            
+            for (let i = 1; i < l; i++) {
+                if (i <= right) {
+                    z[i] = Math.min(right - i + 1, z[i - left]);
+                }
+                while (i + z[i] < l && concat.charAt(z[i]) == concat.charAt(i + z[i])) {
+                    z[i]++;
+                }
+                if (i + z[i] - 1 > right) {
+                    left = i;
+                    right = i + z[i] - 1;
+                }
+            }
+            
+            return z;
+        }
+        
+        // Function to search pattern using Z-Algorithm on complementary sequence
+        function searchPatternWithZAlgo(pattern, text) {
+            document.getElementById('searchResultsContainer').style.display = 'block';
+            const resultsDiv = document.getElementById('searchResults');
+            const timeDiv = document.getElementById('executionTime');
+            
+            if (!pattern || pattern.length === 0) {
+                resultsDiv.innerHTML = "Please enter a pattern to search.";
+                timeDiv.textContent = "";
+                return;
+            }
+            
+            pattern = pattern.toUpperCase();
+            
+            // Generate complementary sequence
+            const complementarySeq = generateComplementarySequence(text.toUpperCase());
+            
+            const startTime = performance.now();
+            
+            // Concatenate pattern and complementary sequence with a separator character
+            const concat = pattern + "$" + complementarySeq;
+            const z = zAlgorithm(concat);
+            
+            // Find positions where pattern matches in complementary sequence
+            const positions = [];
+            for (let i = 0; i < z.length; i++) {
+                if (z[i] === pattern.length) {
+                    positions.push(i - pattern.length - 1);
+                }
+            }
+            
+            const endTime = performance.now();
+            const duration = endTime - startTime;
+            
+            // Store matched positions and pattern length for visualization
+            positions.patternLength = pattern.length;
+            matchedPositions = positions;
+            
+            // Display results
+            if (positions.length === 0) {
+                resultsDiv.innerHTML = `Pattern '${pattern}' not found in the complementary sequence.`;
+                // Redraw without highlighting
+                drawBasePairs(text);
+            } else {
+                resultsDiv.innerHTML = 
+                    `Pattern '${pattern}' found at ${positions.length} positions in the complementary sequence:<br>` +
+                    `Indexes: ${positions.join(', ')}`;
+                
+                // Redraw with highlighting the matched positions
+                drawBasePairs(text, positions);
+            }
+            
+            timeDiv.textContent = `Z-algorithm execution time: ${duration.toFixed(3)} milliseconds`;
+        }
+        
+        // Disease patterns database (simplified for demonstration)
+        // Disease patterns database with updated patterns
+    const diseasePatterns = {
+    "Sickle Cell Anemia": {
+        pattern: "GTG",
+        description: "A mutation in the hemoglobin gene when found on 11th index"
+    },
+    "Huntington's Disease": {
+        pattern: "CAG",
+        description: "A genetic disorder characterized by the repetition of CAG trinucleotide when repeated more than 35 times"
+    },
+    "Myotonic Dystrophy Type 1": {
+        pattern: "CTG",
+        description: "A mutation in the CFTR gene affecting chloride channels when repeated more than 50 times."
+    },
+    "Amyotrophic Lateral Sclerosis": {
+        pattern: "GGGGCC",
+        description: "A fatal genetic disorder that causes progressive destruction of nerve cells"
+    },
+    "Kennedy’s Disease": {
+        pattern: "CAG",
+        description: "A genetic disorder that causes phenylalanine to build up in the body repeats more than 36 times"
+    },
+    "Fragile X Syndrome": {
+        pattern: "CGG",
+        description: "A genetic condition causing intellectual disability due to CGG repeats 55 to 200 times"
+    },
+    "Alzheimer Type 1": {
+        pattern: "ATGAAA",
+        description: "Early-onset familial Alzheimer's disease, 112 and 158 have T and C"
+    },
+    "Alzheimer Type 2": {
+        pattern: "GATGAT",
+        description: "Late-onset Alzheimer's disease associated with genetic factors, 112 and 158 both have C"
+    },
+    "Spinocerebellar Ataxia Type 1": {
+        pattern: "CAG",
+        description: "A progressive, inherited disorder that primarily affects the cerebellum, coordination and movement due to CAG repeated more than 40"
+    },
+    "Friedreich's Ataxia": {
+        pattern: "GAA",
+        description: "A rare, inherited disorder that primarily affects the nervous system, causing progressive damage to the spinal cord, peripheral nerves, and cerebellum, ultimately leading to impaired muscle coordination and other physical symptoms, GAA repeated more than 66"
+    },
+    "Oculopharyngeal Muscular Dystrophy": {
+        pattern: "GCG",
+        description: "A genetic muscle disorder with progressive eyelid drooping and swallowing difficulties repeatation more than 10 times"
+    },
+    "Dentatorubral–pallidoluysian atrophy": {
+        pattern: "CAG",
+        description: "A progressive brain disorder that causes involuntary movements, psychiatric problems, and dementia"
+    }
+    };
+        
+ // Function to search for disease patterns in DNA sequence with specific conditions
+// Function to search for disease patterns in DNA sequence with specific conditions
+function searchForDiseases(sequence) {
+    document.getElementById('diseaseResultsContainer').style.display = 'block';
+    const resultsDiv = document.getElementById('diseaseResults');
+    
+    if (!sequence || sequence.length === 0) {
+        resultsDiv.innerHTML = "Please enter a DNA sequence first.";
+        return;
+    }
+    
+    sequence = sequence.toUpperCase();
+    const complementarySeq = generateComplementarySequence(sequence);
+    
+    let foundDiseases = [];
+    let foundPositions = [];
+    
+    // Reset all disease buttons to default color
+    const diseaseBoxes = document.querySelectorAll('.disease-box');
+    diseaseBoxes.forEach(box => {
+        box.style.backgroundColor = '#f0f0f0';
+    });
+    
+    // Check for specific patterns and positions in complementary sequence
+    
+    // 1. If 11th index has pattern GTG - color red button of Sickle cell anemia
+    if (complementarySeq.length > 13 && complementarySeq.substring(11, 14) === 'GTG') {
+        foundDiseases.push({
+            disease: "Sickle Cell Anemia",
+            pattern: "GTG",
+            position: 11,
+            strand: "complementary",
+            description: "A mutation in the hemoglobin gene at position 11"
+        });
+        
+        // Color the Sickle Cell Anemia button red
+        document.querySelector('.disease-box:nth-child(1)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // 2. If CAG is repeated more than 7 times - color red button Huntington's Disease
+    const cagMatches = complementarySeq.match(/(CAG){7,}/g);
+    if (cagMatches) {
+        foundDiseases.push({
+            disease: "Huntington's Disease",
+            pattern: cagMatches[0],
+            position: complementarySeq.indexOf(cagMatches[0]),
+            strand: "complementary",
+            description: "Expansion of CAG trinucleotide repeats"
+        });
+        
+        // Color the Huntington's Disease button red
+        document.querySelector('.disease-box:nth-child(2)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // 3. If CTG repeated more than 10 times - color red button Myotonic Dystrophy
+    const ctgMatches = complementarySeq.match(/(CTG){10,}/g);
+    if (ctgMatches) {
+        foundDiseases.push({
+            disease: "Myotonic Dystrophy",
+            pattern: ctgMatches[0],
+            position: complementarySeq.indexOf(ctgMatches[0]),
+            strand: "complementary",
+            description: "Expansion of CTG trinucleotide repeats"
+        });
+        
+        // Color the Myotonic Dystrophy button red
+        document.querySelector('.disease-box:nth-child(3)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // 4. If GGGGCC pattern is found - color red Amyotrophic lateral sclerosis
+    const alsIndex = complementarySeq.indexOf('GGGGCC');
+    if (alsIndex !== -1) {
+        foundDiseases.push({
+            disease: "Amyotrophic Lateral Sclerosis",
+            pattern: "GGGGCC",
+            position: alsIndex,
+            strand: "complementary",
+            description: "Hexanucleotide repeat expansion"
+        });
+        
+        // Color the ALS button red
+        document.querySelector('.disease-box:nth-child(4)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // 5. If CGG repeated more than 11 times - color red button Fragile X-associated Tremor
+    const cggMatches = complementarySeq.match(/(CGG){11,}/g);
+    if (cggMatches) {
+        foundDiseases.push({
+            disease: "Fragile X-associated Tremor",
+            pattern: cggMatches[0],
+            position: complementarySeq.indexOf(cggMatches[0]),
+            strand: "complementary",
+            description: "Premutation in FMR1 gene with CGG repeats"
+        });
+        
+        // Color the Fragile X-associated Tremor button red
+        document.querySelector('.disease-row:nth-child(2) .disease-box:nth-child(1)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // 6. If CAG repeat more than 7 - color red button Kennedy's Disease
+    // (Note: this overlaps with Huntington's check, so we'll use the same result)
+    if (cagMatches) {
+        foundDiseases.push({
+            disease: "Kennedy's Disease",
+            pattern: cagMatches[0],
+            position: complementarySeq.indexOf(cagMatches[0]),
+            strand: "complementary",
+            description: "CAG trinucleotide expansion in androgen receptor gene"
+        });
+        
+        // Color the Kennedy's Disease button red
+        document.querySelector('.disease-row:nth-child(2) .disease-box:nth-child(2)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // 7. If on 12th index T and 15th index C - Alzheimer type 1
+    if (complementarySeq.length > 15 && complementarySeq.charAt(12) === 'T' && complementarySeq.charAt(15) === 'C') {
+        foundDiseases.push({
+            disease: "Alzheimer Type 1",
+            pattern: `${complementarySeq.substring(12, 16)}`,
+            position: 12,
+            strand: "complementary",
+            description: "Early-onset Alzheimer's specific mutation"
+        });
+        
+        // Color the Alzheimer Type 1 button red
+        document.querySelector('.disease-row:nth-child(2) .disease-box:nth-child(3)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // 8. If on 12th index C and 15th index T - also Alzheimer type 1 
+    // This is a duplicate condition for Alzheimer's Type 1, different mutation
+    if (complementarySeq.length > 15 && complementarySeq.charAt(12) === 'C' && complementarySeq.charAt(15) === 'T') {
+        // Only add if not already added (alternative mutation)
+        if (!foundDiseases.some(d => d.disease === "Alzheimer Type 1")) {
+            foundDiseases.push({
+                disease: "Alzheimer Type 1",
+                pattern: `${complementarySeq.substring(12, 16)}`,
+                position: 12,
+                strand: "complementary",
+                description: "Early-onset Alzheimer's alternative mutation"
+            });
+            
+            // Color the Alzheimer Type 1 button red
+            document.querySelector('.disease-row:nth-child(2) .disease-box:nth-child(3)').style.backgroundColor = '#ffcccc';
+        }
+    }
+    
+    // 9. If on 12th index C and 15th index C - Alzheimer type 2
+    if (complementarySeq.length > 15 && complementarySeq.charAt(12) === 'C' && complementarySeq.charAt(15) === 'C') {
+        foundDiseases.push({
+            disease: "Alzheimer Type 2",
+            pattern: `${complementarySeq.substring(12, 16)}`,
+            position: 12,
+            strand: "complementary",
+            description: "Late-onset Alzheimer's specific mutation"
+        });
+        
+        // Color the Alzheimer Type 2 button red
+        document.querySelector('.disease-row:nth-child(2) .disease-box:nth-child(4)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // 10. If CAG repeated more than 8 times - Spinocerebellar Ataxia Type 1
+    const scaMatches = complementarySeq.match(/(CAG){8,}/g);
+    if (scaMatches) {
+        foundDiseases.push({
+            disease: "Spinocerebellar Ataxia Type 1",
+            pattern: scaMatches[0],
+            position: complementarySeq.indexOf(scaMatches[0]),
+            strand: "complementary",
+            description: "CAG repeat expansion causing cerebellar degeneration"
+        });
+        
+        // Color the SCA button red
+        document.querySelector('.disease-row:nth-child(3) .disease-box:nth-child(1)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // 11. If GAA repeated more than 13 times - Friedreich's Ataxia
+    const faMatches = complementarySeq.match(/(GAA){13,}/g);
+    if (faMatches) {
+        foundDiseases.push({
+            disease: "Friedreich's Ataxia",
+            pattern: faMatches[0],
+            position: complementarySeq.indexOf(faMatches[0]),
+            strand: "complementary",
+            description: "GAA repeat expansion in the FXN gene"
+        });
+        
+        // Color the Friedreich's Ataxia button red
+        document.querySelector('.disease-row:nth-child(3) .disease-box:nth-child(2)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // 12. If GCG repeated more than 2 times - Oculopharyngeal Muscular Dystrophy
+    const opmdMatches = complementarySeq.match(/(GCG){2,}/g);
+    if (opmdMatches) {
+        foundDiseases.push({
+            disease: "Oculopharyngeal Muscular Dystrophy",
+            pattern: opmdMatches[0],
+            position: complementarySeq.indexOf(opmdMatches[0]),
+            strand: "complementary",
+            description: "GCG repeat expansion in the PABPN1 gene"
+        });
+        
+        // Color the OPMD button red
+        document.querySelector('.disease-row:nth-child(3) .disease-box:nth-child(3)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // 13. If GTC repeated more than 9 times - Dentatorubral–pallidoluysian atrophy
+    const drplaMatches = complementarySeq.match(/(CAG){9,}/g);
+    if (drplaMatches) {
+        foundDiseases.push({
+            disease: "Dentatorubral–pallidoluysian atrophy",
+            pattern: drplaMatches[0],
+            position: complementarySeq.indexOf(drplaMatches[0]),
+            strand: "complementary",
+            description: "GTC repeat expansion in the ATN1 gene"
+        });
+        
+        // Color the DRPLA button red
+        document.querySelector('.disease-row:nth-child(3) .disease-box:nth-child(4)').style.backgroundColor = '#ffcccc';
+    }
+    
+    // Display results
+    if (foundDiseases.length === 0) {
+        resultsDiv.innerHTML = "No disease-associated patterns found in the DNA sequence.";
+    } else {
+        let resultsHTML = `<strong>Found ${foundDiseases.length} potential disease associations:</strong><br><br>`;
+        
+        foundDiseases.forEach((result, i) => {
+            resultsHTML += `${i+1}. <strong>${result.disease}</strong> (${result.strand} strand, position ${result.position})<br>`;
+            resultsHTML += `   Pattern: ${result.pattern}<br>`;
+            resultsHTML += `   Description: ${result.description}<br><br>`;
+            
+            // Store positions for the first disease found (for visualization)
+            if (i === 0) {
+                const positions = [];
+                for (let p = result.position; p < result.position + result.pattern.length; p++) {
+                    positions.push(p);
+                }
+                positions.patternLength = result.pattern.length;
+                foundPositions = positions;
+            }
+        });
+        
+        resultsDiv.innerHTML = resultsHTML;
+        
+        // Highlight the first found disease pattern in the visualization
+        if (foundDiseases.length > 0) {
+            matchedPositions = foundPositions;
+            drawBasePairs(sequence, foundPositions);
+        }
+    }
+}
+
+// Function to search for a specific disease (updated to use the same logic)
+// Function to search for a specific disease
+function searchForSpecificDisease(diseaseName) {
+    const sequence = document.getElementById("sequenceInput").value.trim();
+    
+    if (sequence.length === 0) {
+        alert("Please enter or visualize a DNA sequence first.");
+        return;
+    }
+    
+    // First run the full disease search to update all buttons
+    searchForDiseases(sequence);
+    
+    document.getElementById('diseaseResultsContainer').style.display = 'block';
+    const resultsDiv = document.getElementById('diseaseResults');
+    
+    const upperSequence = sequence.toUpperCase();
+    const complementarySeq = generateComplementarySequence(upperSequence);
+    
+    let foundPattern = false;
+    let patternDescription = "";
+    let foundPosition = -1;
+    let matchPattern = "";
+    
+    // Check for specific conditions based on the disease name
+    switch(diseaseName) {
+        case "Sickle Cell Anemia":
+            if (complementarySeq.length > 13 && complementarySeq.substring(11, 14) === 'GTG') {
+                foundPattern = true;
+                matchPattern = "GTG";
+                foundPosition = 11;
+                patternDescription = "A mutation in the hemoglobin gene at position 11";
+            }
+            break;
+            
+        case "Huntington's Disease":
+            const cagMatches = complementarySeq.match(/(CAG){7,}/g);
+            if (cagMatches) {
+                foundPattern = true;
+                matchPattern = cagMatches[0];
+                foundPosition = complementarySeq.indexOf(cagMatches[0]);
+                patternDescription = "Expansion of CAG trinucleotide repeats";
+            }
+            break;
+            
+        case "Myotonic Dystrophy":
+            const ctgMatches = complementarySeq.match(/(CTG){10,}/g);
+            if (ctgMatches) {
+                foundPattern = true;
+                matchPattern = ctgMatches[0];
+                foundPosition = complementarySeq.indexOf(ctgMatches[0]);
+                patternDescription = "Expansion of CTG trinucleotide repeats";
+            }
+            break;
+            
+        case "Amyotrophic Lateral Sclerosis":
+            const alsIndex = complementarySeq.indexOf('GGGGCC');
+            if (alsIndex !== -1) {
+                foundPattern = true;
+                matchPattern = "GGGGCC";
+                foundPosition = alsIndex;
+                patternDescription = "Hexanucleotide repeat expansion";
+            }
+            break;
+            
+        case "Fragile X-associated Tremor":
+            const cggMatches = complementarySeq.match(/(CGG){11,}/g);
+            if (cggMatches) {
+                foundPattern = true;
+                matchPattern = cggMatches[0];
+                foundPosition = complementarySeq.indexOf(cggMatches[0]);
+                patternDescription = "Premutation in FMR1 gene with CGG repeats";
+            }
+            break;
+            
+        case "Kennedy's Disease":
+            const kennedyCagMatches = complementarySeq.match(/(CAG){7,}/g);
+            if (kennedyCagMatches) {
+                foundPattern = true;
+                matchPattern = kennedyCagMatches[0];
+                foundPosition = complementarySeq.indexOf(kennedyCagMatches[0]);
+                patternDescription = "CAG trinucleotide expansion in androgen receptor gene";
+            }
+            break;
+            
+        case "Alzheimer Type 1":
+            if (complementarySeq.length > 15) {
+                if (complementarySeq.charAt(12) === 'T' && complementarySeq.charAt(15) === 'C') {
+                    foundPattern = true;
+                    matchPattern = complementarySeq.substring(12, 16);
+                    foundPosition = 12;
+                    patternDescription = "Early-onset Alzheimer's specific mutation (T...C)";
+                } else if (complementarySeq.charAt(12) === 'C' && complementarySeq.charAt(15) === 'T') {
+                    foundPattern = true;
+                    matchPattern = complementarySeq.substring(12, 16);
+                    foundPosition = 12;
+                    patternDescription = "Early-onset Alzheimer's alternative mutation (C...T)";
+                }
+            }
+            break;
+            
+        case "Alzheimer Type 2":
+            if (complementarySeq.length > 15 && complementarySeq.charAt(12) === 'C' && complementarySeq.charAt(15) === 'C') {
+                foundPattern = true;
+                matchPattern = complementarySeq.substring(12, 16);
+                foundPosition = 12;
+                patternDescription = "Late-onset Alzheimer's specific mutation";
+            }
+            break;
+            
+        case "Spinocerebellar Ataxia Type 1":
+            const scaMatches = complementarySeq.match(/(CAG){8,}/g);
+            if (scaMatches) {
+                foundPattern = true;
+                matchPattern = scaMatches[0];
+                foundPosition = complementarySeq.indexOf(scaMatches[0]);
+                patternDescription = "CAG repeat expansion causing cerebellar degeneration";
+            }
+            break;
+            
+        case "Friedreich's Ataxia":
+            const faMatches = complementarySeq.match(/(GAA){13,}/g);
+            if (faMatches) {
+                foundPattern = true;
+                matchPattern = faMatches[0];
+                foundPosition = complementarySeq.indexOf(faMatches[0]);
+                patternDescription = "GAA repeat expansion in the FXN gene";
+            }
+            break;
+            
+        case "Oculopharyngeal Muscular Dystrophy":
+            const opmdMatches = complementarySeq.match(/(GCG){2,}/g);
+            if (opmdMatches) {
+                foundPattern = true;
+                matchPattern = opmdMatches[0];
+                foundPosition = complementarySeq.indexOf(opmdMatches[0]);
+                patternDescription = "GCG repeat expansion in the PABPN1 gene";
+            }
+            break;
+            
+        case "Dentatorubral–pallidoluysian atrophy":
+            const drplaMatches = complementarySeq.match(/(GAC){9,}/g);
+            if (drplaMatches) {
+                foundPattern = true;
+                matchPattern = drplaMatches[0];
+                foundPosition = complementarySeq.indexOf(drplaMatches[0]);
+                patternDescription = "GTC repeat expansion in the ATN1 gene";
+            }
+            break;
+            
+        default:
+            // If not a special condition, use the old diseasePatterns object
+            const diseaseData = diseasePatterns[diseaseName];
+            if (diseaseData) {
+                const pattern = diseaseData.pattern.toUpperCase();
+                patternDescription = diseaseData.description;
+                
+                const mainIndex = complementarySeq.indexOf(pattern);
+                if (mainIndex !== -1) {
+                    foundPattern = true;
+                    matchPattern = pattern;
+                    foundPosition = mainIndex;
+                }
+            }
+    }
+    
+    // Display results specific to the selected disease
+    if (!foundPattern) {
+        resultsDiv.innerHTML = `No pattern for "${diseaseName}" found in the DNA sequence.`;
+    } else {
+        let resultsHTML = `<strong>Found pattern for "${diseaseName}":</strong><br><br>`;
+        resultsHTML += `<strong>Description:</strong> ${patternDescription}<br>`;
+        resultsHTML += `<strong>Pattern:</strong> ${matchPattern}<br>`;
+        resultsHTML += `<strong>Position:</strong> ${foundPosition} (complementary strand)<br>`;
+        
+        resultsDiv.innerHTML = resultsHTML;
+        
+        // Highlight the pattern in the visualization
+        const positions = [];
+        for (let p = foundPosition; p < foundPosition + matchPattern.length; p++) {
+            positions.push(p);
+        }
+        positions.patternLength = matchPattern.length;
+        matchedPositions = positions;
+        drawBasePairs(sequence, positions);
+    }
+}
+
+        // Handle sequence visualization
+        document.getElementById("visualizeButton").addEventListener("click", () => {
+            const input = document.getElementById("sequenceInput").value.trim().toUpperCase();
+            if (input.length > 0) {
+                // Reset any existing matches
+                matchedPositions = [];
+                drawBasePairs(input);
+            }
+        });
+        
+        // Handle pattern search
+        document.getElementById("searchButton").addEventListener("click", () => {
+            const pattern = document.getElementById("patternInput").value.trim();
+            const sequence = document.getElementById("sequenceInput").value.trim();
+            
+            if (sequence.length === 0) {
+                alert("Please enter or visualize a DNA sequence first.");
+                return;
+            }
+            
+            searchPatternWithZAlgo(pattern, sequence);
+        });
+        
+        // Handle disease search button
+        document.getElementById("searchDiseaseButton").addEventListener("click", () => {
+            const sequence = document.getElementById("sequenceInput").value.trim();
+            
+            if (sequence.length === 0) {
+                alert("Please enter or visualize a DNA sequence first.");
+                return;
+            }
+            
+            searchForDiseases(sequence);
+        });
+
+        // Set up camera and lights
+        camera.position.set(0, 10, 25);
+        camera.lookAt(0, 10, 0);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        directionalLight.position.set(0, 10, 10);
+        scene.add(directionalLight);
+
+        // Animation loop
+        let angle = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            angle += 0.005;
+            scene.rotation.y = angle;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const newWidth = container.clientWidth;
+            const newHeight = container.clientHeight;
+            camera.aspect = newWidth / newHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(newWidth, newHeight);
+        });
+
+        // Load hardcoded DNA sequence
+        const hardcodedSequence = "ATGCGTACGTTAGCATGCAAAGTCGTTTAAAGGCATGCGTACTAGCTATGC";
+        
+        // Load initial DNA sequence when the page loads
+        window.addEventListener('load', () => {
+            document.getElementById("sequenceInput").value = hardcodedSequence;
+            const complementarySeq = generateComplementarySequence(hardcodedSequence);
+            document.getElementById("complementaryInput").value = complementarySeq;
+            drawBasePairs(hardcodedSequence);
+        });
+
+        //Sickle Cell Anemia - ATGACTGACGCCACGTACTAGG
+        //Huntington’s Disease - ATGGTCGTCGTCGTCGTCGTCGTCGTC
+        //Myotonic Dystrophy - ATGGACGACGACGACGACGACGACGACGACGACGAC
+        //ALS - ATCCCCGGGTTAGTACCGTA
+        //Fragile X - ATGGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCC
+        // Kenedys disease - ATGGTCGTCGTCGTCGTCGTCGTCGTC
+        //Alzheimer Type 1 - AAAATGCGTACGATAGGTTACG
+        //Alzimer type 2 - ATGGTCGTCGTCGTCGTCGTCGTCGTC
+        //Spinocerebellar Ataxia Type 1 - ATGGTCGTCGTCGTCGTCGTCGTCGTC
+        //Friedreich’s Ataxia - ATGCTTCTTCTTCTTCTTCTTCTTCTTCTTCTTCTTCTTCTTCTTCTTCTTCTTCTTCTT
+        //Oculopharyngeal Muscular Dystrophy - ATGCGCCGCCGCCGCCGCCGCCGCCGCCGCCGCCGC
+        //DRPLA - GTCGTCGTCGTCGTCGTCGTCGTCGTCGTCGTC
+    </script>
+</body>
+</html>
